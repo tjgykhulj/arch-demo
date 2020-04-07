@@ -1,0 +1,47 @@
+group 'org.github.tjg'
+version '1.0-SNAPSHOT'
+
+ext {
+    springBootVersion = '2.2.5.RELEASE'
+    lombokVersion = '1.18.6'
+    jacksonVersion = '2.9.9'
+}
+
+buildscript {
+    ext {
+        springBootVersion = '2.2.5.RELEASE'
+    }
+
+    repositories {
+        maven { url "https://maven.aliyun.com/repository/public" }
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
+    }
+}
+
+allprojects {
+    apply plugin: "java-library"
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    repositories {
+        maven { url "https://maven.aliyun.com/repository/public" }
+    }
+
+    dependencies {
+        compile "org.apache.commons:commons-lang3:3.10"
+        compile "org.springframework.boot:spring-boot-starter:$springBootVersion"
+        compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+        compileOnly "org.projectlombok:lombok:$lombokVersion"
+        testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+    }
+}
+
+project(":doc-plugin") {
+    dependencies {
+        implementation gradleApi()
+    }
+}
