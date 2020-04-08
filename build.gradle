@@ -1,6 +1,3 @@
-group 'org.github.tjg'
-version '1.0-SNAPSHOT'
-
 ext {
     springBootVersion = '2.2.5.RELEASE'
     lombokVersion = '1.18.6'
@@ -13,10 +10,12 @@ buildscript {
     }
 
     repositories {
+        mavenLocal()
         maven { url "https://maven.aliyun.com/repository/public" }
     }
 
     dependencies {
+        classpath("org.github.tjg:doc-plugin:1.0.0.RC1")
         classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
     }
 }
@@ -28,11 +27,13 @@ allprojects {
     targetCompatibility = 1.8
 
     repositories {
+        mavenLocal()
         maven { url "https://maven.aliyun.com/repository/public" }
     }
 
     dependencies {
         compile "org.apache.commons:commons-lang3:3.10"
+        compile "com.google.guava:guava:28.1-jre"
         compile "org.springframework.boot:spring-boot-starter:$springBootVersion"
         compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
         compileOnly "org.projectlombok:lombok:$lombokVersion"
@@ -40,8 +41,33 @@ allprojects {
     }
 }
 
+project(":config-center") {
+    apply plugin: 'org.github.tjg.doc'
+}
+
 project(":doc-plugin") {
+    apply plugin: 'maven-publish'
+
+    group 'org.github.tjg'
+    version '1.0.0.RC1'
+
+    task sourceJar(type: Jar) {
+        from sourceSets.main.allJava
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+
+                artifact sourceJar {
+                    classifier "sources"
+                }
+            }
+        }
+    }
     dependencies {
         implementation gradleApi()
+        compile "org.reflections:reflections:0.9.10"
     }
 }
