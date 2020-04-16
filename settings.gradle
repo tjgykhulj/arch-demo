@@ -1,4 +1,4 @@
 rootProject.name = 'arch-demo'
-include 'config-center'
-include 'doc-plugin'
-
+include 'spring-demo'
+include 'plugin-demo'
+include 'netty-demo'
